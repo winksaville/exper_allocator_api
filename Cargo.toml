@@ -1,0 +1,50 @@
+[package]
+name = "exper_allocator_api"
+authors = [ "Wink Saville <wink@saville.com" ]
+license = "MIT OR Apache-2.0"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dev-dependencies]
+#criterion = "0.4.0"
+#iai = "0.1.1"
+
+#[[bench]]
+#name = "crit"
+#path = "benches/crit.rs"
+#harness = false
+#
+#[[bench]]
+#name = "iai"
+#path = "benches/iai.rs"
+#harness = false
+
+[features]
+
+# From: https://doc.rust-lang.org/cargo/reference/profiles.html#dev
+[profile.dev]
+opt-level = 0
+debug = true
+#split-debuginfo = '...'  # Platform-specific.
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = 'unwind'
+incremental = true
+codegen-units = 256
+rpath = false
+
+# From: https://doc.rust-lang.org/cargo/reference/profiles.html#release
+[profile.release]
+opt-level = 3
+debug = false
+#split-debuginfo = '...'  # Platform-specific.
+debug-assertions = false
+overflow-checks = false
+lto = false
+panic = 'unwind'
+incremental = false
+codegen-units = 1
+rpath = false
