@@ -142,6 +142,82 @@ main:-
 ==57148== ERROR SUMMARY: 4 errors from 2 contexts (suppressed: 0 from 0)
 ```
 
+## ltrace
+
+Using ltrace you can see the malloc and free calls, AFAICT there
+is nothing wrong. `valgrind` is reporting that there are 8 bytes of
+writes and reads outside of allocated space. The address is the
+last 16 bytes of the allocated space. :
+```
+==57148==  Address 0x4a8c530 is 800 bytes inside an unallocated block of size 4,189,648 in arena "client"
+```
+
+But using ltrace, while the addresses are different from `valgrind`
+data, you can see the order is "correct".
+ 1) line 17 the 160 bytes is allocated from the system using `malloc`
+ 2) line 22 we've allocated by pop from `available`
+ 3) line 24 we've deallocated by pushing to `available`
+ 4) line 27 it its returned to the system using `free`
+
+ So everything LGTM, and I have no idea why `valgrind` is complaining :(
+```
+    17  malloc@libc.so.6(160)                            = 0x557258d25ba0
+    18  malloc@libc.so.6(32)                             = 0x557258d25ae0
+    19  MyAllocator::new:- MyAllocator { data: 0x557258d25ba0, layout: Layout { size: 160, align: 8 (1 << 3) }, count: 10, available: RefCell { value: [0x557258d25ba0, 0x557258d25c40, 0x557258d25ce0, 0x557258d25d80, 0x557258d25e20, 0x557258d25ec0, 0x557258d25f60, 0x557258d26000, 0x557258d260a0, 0x557258d26140] } }
+    20  allocate:+ layout align=8 size=16 self.available.len=10
+    21  allocate:  ptr=0x557258d26140 layout align=8 size=16
+    22  allocate:- ptr=0x557258d26140 layout align=8 size=16 self.available.len=9
+    23  deallocate:+ ptr=0x557258d26140 layout align=8 size=16 self.available.len=9
+    24  deallocate: p_mut_u8=0x557258d26140
+    25  deallocate:- ptr=0x557258d26140 layout align=8 size=16 self.available.len=10
+    26  MyAllocator::drop:+ MyAllocator { data: 0x557258d25ba0, layout: Layout { size: 160, align: 8 (1 << 3) }, count: 10, available: RefCell { value: [0x557258d25ba0, 0x557258d25c40, 0x557258d25ce0, 0x557258d25d80, 0x557258d25e20, 0x557258d25ec0, 0x557258d25f60, 0x557258d26000, 0x557258d260a0, 0x557258d26140] } }
+    27  free@libc.so.6(0x557258d25ba0)                   = <void>
+    28  MyAllocator::drop:-
+```
+
+Here is the full `ltrace` output:
+```
+wink@3900x 22-12-15T03:54:36.260Z:~/prgs/rust/myrepos/exper_allocator_api (main)
+$ ltrace -x "malloc+free*" target/debug/exper_allocator_api > ltrace.txt 2>&1
+wink@3900x 22-12-15T03:55:06.652Z:~/prgs/rust/myrepos/exper_allocator_api (main)
+$ cat -n ltrace.txt 
+     1  malloc@libc.so.6(472)                            = 0x557258d252a0
+     2  malloc@libc.so.6(120)                            = 0x557258d25480
+     3  malloc@libc.so.6(1024)                           = 0x557258d25500
+     4  free@libc.so.6(0x557258d25910)                   = <void>
+     5  free@libc.so.6(0x557258d25500)                   = <void>
+     6  free@libc.so.6(0x557258d252a0)                   = <void>
+     7  malloc@libc.so.6(32)                             = 0x557258d25a10
+     8  malloc@libc.so.6(32)                             = 0x557258d25ae0
+     9  free@libc.so.6(0x557258d25a10)                   = <void>
+    10  free@libc.so.6(0x557258d25ae0)                   = <void>
+    11  free@libc.so.6(0x557258d25a40)                   = <void>
+    12  malloc@libc.so.6(5)                              = 0x557258d25b10
+    13  malloc@libc.so.6(48)                             = 0x557258d25b30
+    14  malloc@libc.so.6(1024)                           = 0x557258d25500
+    15  main:+
+    16  MyAllocator::new:+
+    17  malloc@libc.so.6(160)                            = 0x557258d25ba0
+    18  malloc@libc.so.6(32)                             = 0x557258d25ae0
+    19  MyAllocator::new:- MyAllocator { data: 0x557258d25ba0, layout: Layout { size: 160, align: 8 (1 << 3) }, count: 10, available: RefCell { value: [0x557258d25ba0, 0x557258d25c40, 0x557258d25ce0, 0x557258d25d80, 0x557258d25e20, 0x557258d25ec0, 0x557258d25f60, 0x557258d26000, 0x557258d260a0, 0x557258d26140] } }
+    20  allocate:+ layout align=8 size=16 self.available.len=10
+    21  allocate:  ptr=0x557258d26140 layout align=8 size=16
+    22  allocate:- ptr=0x557258d26140 layout align=8 size=16 self.available.len=9
+    23  deallocate:+ ptr=0x557258d26140 layout align=8 size=16 self.available.len=9
+    24  deallocate: p_mut_u8=0x557258d26140
+    25  deallocate:- ptr=0x557258d26140 layout align=8 size=16 self.available.len=10
+    26  MyAllocator::drop:+ MyAllocator { data: 0x557258d25ba0, layout: Layout { size: 160, align: 8 (1 << 3) }, count: 10, available: RefCell { value: [0x557258d25ba0, 0x557258d25c40, 0x557258d25ce0, 0x557258d25d80, 0x557258d25e20, 0x557258d25ec0, 0x557258d25f60, 0x557258d26000, 0x557258d260a0, 0x557258d26140] } }
+    27  free@libc.so.6(0x557258d25ba0)                   = <void>
+    28  MyAllocator::drop:-
+    29  free@libc.so.6(0x557258d25c50)                   = <void>
+    30  main:-
+    31  free@libc.so.6(0x557258d25500)                   = <void>
+    32  free@libc.so.6(0x557258d25b10)                   = <void>
+    33  free@libc.so.6(0x557258d25b30)                   = <void>
+    34  free@libc.so.6(0x557258d25b70)                   = <void>
+    35  +++ exited (status 0) +++
+```
+
 ## License
 
 Licensed under either of
