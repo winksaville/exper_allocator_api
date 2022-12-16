@@ -22,6 +22,7 @@ impl MyAllocator {
     pub fn new() -> Self {
         println!("MyAllocator::new:+");
         const COUNT: usize = 10;
+        let protocol_layout = Layout::new::<Protocol>();
         let layout = Layout::new::<[Protocol; COUNT]>();
         let data = unsafe { alloc(layout) };
 
@@ -31,7 +32,7 @@ impl MyAllocator {
 
         let mut available = vec![];
         for i in 0..COUNT {
-            let pp: *mut u8 = ((data as usize) + (i * layout.size())) as *mut u8;
+            let pp: *mut u8 = ((data as usize) + (i * protocol_layout.size())) as *mut u8;
             available.push(pp);
         }
         let ma = Self {

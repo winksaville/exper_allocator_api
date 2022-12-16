@@ -16,14 +16,10 @@ fn main() {
 
         let ma = MyAllocator::new();
         let pt = Protocol::Add { left: 5, right: 6 };
-        // Creating m causes valgrind to generate 2 errors
+
         let m = Box::<Protocol, MyAllocator>::new_in(pt, ma);
-
-        // Printing causes valgrind two additional errors, 4 total
         println!("main inner: m={m:?}");
-
-        // And asserting causes valgrind two more errors, 6 total
-        //assert_eq!(*m, Protocol::Add { left: 5, right: 6 });
+        assert_eq!(*m, Protocol::Add { left: 5, right: 6 });
 
         println!("main inner:-");
     }
