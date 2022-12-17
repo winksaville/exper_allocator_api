@@ -1,7 +1,8 @@
-#![feature(allocator_api)]
+#![feature(allocator_api, alloc_layout_extra, nonnull_slice_from_raw_parts)]
 use once_cell::sync::Lazy;
 use std::{
     alloc::{alloc, Allocator, Layout},
+    ptr::NonNull,
     sync::Mutex,
 };
 
@@ -48,26 +49,29 @@ pub fn ma_init(count: usize) {
 }
 
 unsafe impl Allocator for MyAllocator {
-    fn allocate(
-        &self,
-        layout: std::alloc::Layout,
-    ) -> Result<std::ptr::NonNull<[u8]>, std::alloc::AllocError> {
-        let npp = if let Ok(mut ma_locked) = MA.lock() {
-            if let Some(p_mut_u8) = ma_locked.pop() {
-                let ref_array_u8 = unsafe { std::slice::from_raw_parts(p_mut_u8.0, layout.size()) };
-                println!("MyAllocator::allocate: p_mut_u8={ref_array_u8:p}");
-                std::ptr::NonNull::<[u8]>::from(ref_array_u8)
-            } else {
-                panic!("MyAllocator::allocate: Empty MA");
-            }
-        } else {
-            panic!("MyAllocator::allocate: Mucked up mutex");
-        };
+    fn allocate(&self, layout: Layout) -> Result<NonNull<[u8]>, std::alloc::AllocError> {
+        // Modeled after: https://github.com/rust-lang/rust/blob/40290505fb0aab2ad673a0caa840fc87a1790338/library/alloc/src/alloc.rs#L173
+        match layout.size() {
+            0 => Ok(NonNull::slice_from_raw_parts(layout.dangling(), 0)),
+            size => {
+                let npp = if let Ok(mut ma_locked) = MA.lock() {
+                    if let Some(p_mut_u8) = ma_locked.pop() {
+                        let ref_array_u8 = unsafe { std::slice::from_raw_parts(p_mut_u8.0, size) };
+                        println!("MyAllocator::allocate: p_mut_u8={ref_array_u8:p}");
+                        NonNull::<[u8]>::from(ref_array_u8)
+                    } else {
+                        panic!("MyAllocator::allocate: Empty MA");
+                    }
+                } else {
+                    panic!("MyAllocator::allocate: Mucked up mutex");
+                };
 
-        Ok(npp)
+                Ok(npp)
+            }
+        }
     }
 
-    unsafe fn deallocate(&self, ptr: std::ptr::NonNull<u8>, _layout: std::alloc::Layout) {
+    unsafe fn deallocate(&self, ptr: NonNull<u8>, _layout: Layout) {
         if let Ok(mut ma_locked) = MA.lock() {
             let p_mut_u8 = ptr.as_ptr();
             println!("MyAllocator::deallocate: p_mut_u8={p_mut_u8:p}");
