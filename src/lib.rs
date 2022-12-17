@@ -1,7 +1,8 @@
 #![feature(allocator_api)]
+use once_cell::sync::Lazy;
 use std::{
-    alloc::{alloc, dealloc, Allocator, Layout},
-    cell::RefCell,
+    alloc::{alloc, Allocator, Layout},
+    sync::Mutex,
 };
 
 #[derive(Debug, PartialEq)]
@@ -10,53 +11,40 @@ pub enum Protocol {
 }
 
 #[derive(Debug)]
-pub struct MyAllocator {
-    data: *mut u8,
-    layout: Layout,
-    count: usize,
-    available: RefCell<Vec<*mut u8>>,
-}
+pub struct MyAllocator;
 
-impl MyAllocator {
-    #[allow(clippy::new_without_default)]
-    pub fn new() -> Self {
-        println!("MyAllocator::new:+");
-        const COUNT: usize = 10;
-        let protocol_layout = Layout::new::<Protocol>();
-        let layout = Layout::new::<[Protocol; COUNT]>();
-        let data = unsafe { alloc(layout) };
+struct PtrMutU8Wrapper(*mut u8);
+unsafe impl Send for PtrMutU8Wrapper {}
+unsafe impl Sync for PtrMutU8Wrapper {}
 
-        if data.is_null() {
-            panic!("Failed allocating memory")
-        }
+static MA: Lazy<Mutex<Vec<PtrMutU8Wrapper>>> =
+    Lazy::new(|| Mutex::new(Vec::<PtrMutU8Wrapper>::new()));
 
-        let mut available = vec![];
-        for i in 0..COUNT {
-            let pp: *mut u8 = ((data as usize) + (i * protocol_layout.size())) as *mut u8;
-            available.push(pp);
-        }
-        let ma = Self {
-            data,
-            count: COUNT,
-            layout,
-            available: RefCell::new(available),
-        };
-        assert_eq!(ma.count, ma.available.borrow().len());
-        println!("MyAllocator::new:- {ma:?}");
+pub fn ma_init(count: usize) {
+    println!("ma_init:+");
+    let protocol_layout = Layout::new::<Protocol>();
 
-        ma
+    // Allocate backing array for MA.
+    // SAFETY: see https://doc.rust-lang.org/reference/type-layout.html#array-layout
+    //         Arrays are size * N and same alignment as the type. In this case
+    // SAFETY: Using unchecked because protocol_layout is safe.
+    let data = unsafe {
+        alloc(Layout::from_size_align_unchecked(
+            protocol_layout.size() * count,
+            protocol_layout.align(),
+        ))
+    };
+
+    if data.is_null() {
+        panic!("ma_init:  Failed allocating memory")
     }
-}
 
-impl Drop for MyAllocator {
-    fn drop(&mut self) {
-        println!("MyAllocator::drop:+ {self:?}");
-        assert_eq!(self.count, self.available.borrow().len());
-        unsafe {
-            dealloc(self.data, self.layout);
-        }
-        println!("MyAllocator::drop:-");
+    let mut available = MA.lock().unwrap();
+    for i in 0..count {
+        let p_mut_u8: *mut u8 = ((data as usize) + (i * protocol_layout.size())) as *mut u8;
+        available.push(PtrMutU8Wrapper(p_mut_u8));
     }
+    println!("ma_init:- len={}", available.len());
 }
 
 unsafe impl Allocator for MyAllocator {
@@ -64,52 +52,29 @@ unsafe impl Allocator for MyAllocator {
         &self,
         layout: std::alloc::Layout,
     ) -> Result<std::ptr::NonNull<[u8]>, std::alloc::AllocError> {
-        println!(
-            "allocate:+ layout align={} size={} self.available.len={}",
-            layout.align(),
-            layout.size(),
-            self.available.borrow().len(),
-        );
-
-        let nnp = if let Some(ptr) = self.available.borrow_mut().pop() {
-            println!(
-                "allocate:  ptr={ptr:?} layout align={} size={}",
-                layout.align(),
-                layout.size()
-            );
-            let ref_array_u8 = unsafe { std::slice::from_raw_parts(ptr, layout.size()) };
-            std::ptr::NonNull::<[u8]>::from(ref_array_u8)
+        let npp = if let Ok(mut ma_locked) = MA.lock() {
+            if let Some(p_mut_u8) = ma_locked.pop() {
+                let ref_array_u8 = unsafe { std::slice::from_raw_parts(p_mut_u8.0, layout.size()) };
+                println!("MyAllocator::allocate: p_mut_u8={ref_array_u8:p}");
+                std::ptr::NonNull::<[u8]>::from(ref_array_u8)
+            } else {
+                panic!("MyAllocator::allocate: Empty MA");
+            }
         } else {
-            panic!("allocate:- No memory available");
+            panic!("MyAllocator::allocate: Mucked up mutex");
         };
-        println!(
-            "allocate:- ptr={:p} layout align={} size={} self.available.len={}",
-            nnp,
-            layout.align(),
-            layout.size(),
-            self.available.borrow().len(),
-        );
 
-        Ok(nnp)
+        Ok(npp)
     }
 
-    unsafe fn deallocate(&self, ptr: std::ptr::NonNull<u8>, layout: std::alloc::Layout) {
-        println!(
-            "deallocate:+ ptr={ptr:?} layout align={} size={} self.available.len={}",
-            layout.align(),
-            layout.size(),
-            self.available.borrow().len(),
-        );
-        let p_mut_u8 = ptr.as_ptr();
-        println!("deallocate: p_mut_u8={p_mut_u8:p}");
-
-        self.available.borrow_mut().push(p_mut_u8);
-        println!(
-            "deallocate:- ptr={ptr:?} layout align={} size={} self.available.len={}",
-            layout.align(),
-            layout.size(),
-            self.available.borrow().len(),
-        );
+    unsafe fn deallocate(&self, ptr: std::ptr::NonNull<u8>, _layout: std::alloc::Layout) {
+        if let Ok(mut ma_locked) = MA.lock() {
+            let p_mut_u8 = ptr.as_ptr();
+            println!("MyAllocator::deallocate: p_mut_u8={p_mut_u8:p}");
+            ma_locked.push(PtrMutU8Wrapper(p_mut_u8));
+        } else {
+            panic!("MyAllocator::deallocate: Mucked up mutex");
+        }
     }
 }
 
@@ -119,9 +84,9 @@ mod tests {
 
     #[test]
     fn test_one_allocation() {
-        let ma = MyAllocator::new();
+        ma_init(10);
         let msg = Protocol::Add { left: 3, right: 4 };
-        let m = Box::<Protocol, MyAllocator>::new_in(msg, ma);
+        let m = Box::<Protocol, MyAllocator>::new_in(msg, MyAllocator);
         assert_eq!(*m, Protocol::Add { left: 3, right: 4 });
     }
 }
