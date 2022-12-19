@@ -1,0 +1,76 @@
+.section .text.crit::validate,"ax",@progbits
+	.p2align	4, 0x90
+	.type	crit::validate,@function
+crit::validate:
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 8
+		fn validate(i: usize, left: u64, right: u64) {
+	.cfi_startproc
+	sub rsp, 152
+	.cfi_def_cfa_offset 160
+	mov qword ptr [rsp + 8], rdi
+	mov qword ptr [rsp + 16], rsi
+	mov qword ptr [rsp + 24], rdx
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 10
+		if left != i_u64 || right != i_u64 + 1 {
+	lea rax, [rdi + 1]
+
+	cmp rsi, rdi
+	jne .LBB289_3
+
+	cmp rax, rdx
+	jne .LBB289_3
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 16
+		}
+	add rsp, 152
+	.cfi_def_cfa_offset 8
+	ret
+
+.LBB289_3:
+	.cfi_def_cfa_offset 160
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 13
+		i + 1
+	mov qword ptr [rsp + 32], rax
+	lea rax, [rsp + 8]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 11
+		panic!(
+	mov qword ptr [rsp + 40], rax
+	mov rax, qword ptr [rip + core::fmt::num::imp::<impl core::fmt::Display for usize>::fmt@GOTPCREL]
+	mov qword ptr [rsp + 48], rax
+	lea rcx, [rsp + 16]
+	mov qword ptr [rsp + 56], rcx
+	mov rcx, qword ptr [rip + core::fmt::num::imp::<impl core::fmt::Display for u64>::fmt@GOTPCREL]
+	mov qword ptr [rsp + 64], rcx
+	lea rdx, [rsp + 32]
+
+	mov qword ptr [rsp + 72], rdx
+	mov qword ptr [rsp + 80], rax
+	lea rax, [rsp + 24]
+	mov qword ptr [rsp + 88], rax
+	mov qword ptr [rsp + 96], rcx
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/fmt/mod.rs : 398
+		Arguments { pieces, fmt: None, args }
+	lea rax, [rip + .L__unnamed_249]
+
+	mov qword ptr [rsp + 120], rax
+	mov qword ptr [rsp + 128], 4
+	mov qword ptr [rsp + 104], 0
+	lea rax, [rsp + 40]
+
+	mov qword ptr [rsp + 136], rax
+	mov qword ptr [rsp + 144], 4
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 11
+		panic!(
+	lea rsi, [rip + .L__unnamed_250]
+
+	lea rdi, [rsp + 104]
+
+	call qword ptr [rip + core::panicking::panic_fmt@GOTPCREL]
+	ud2
+
+	.size	crit::validate, .Lfunc_end289-crit::validate

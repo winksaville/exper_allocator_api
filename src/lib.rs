@@ -22,7 +22,7 @@ static MA: Lazy<Mutex<Vec<PtrMutU8Wrapper>>> =
     Lazy::new(|| Mutex::new(Vec::<PtrMutU8Wrapper>::new()));
 
 pub fn ma_init(count: usize) {
-    println!("ma_init:+");
+    //println!("ma_init:+");
     let protocol_layout = Layout::new::<Protocol>();
 
     // Allocate backing array for MA.
@@ -45,7 +45,7 @@ pub fn ma_init(count: usize) {
         let p_mut_u8: *mut u8 = ((data as usize) + (i * protocol_layout.size())) as *mut u8;
         available.push(PtrMutU8Wrapper(p_mut_u8));
     }
-    println!("ma_init:- len={}", available.len());
+    //println!("ma_init:- len={}", available.len());
 }
 
 unsafe impl Allocator for MyAllocator {
@@ -57,7 +57,7 @@ unsafe impl Allocator for MyAllocator {
                 let npp = if let Ok(mut ma_locked) = MA.lock() {
                     if let Some(p_mut_u8) = ma_locked.pop() {
                         let ref_array_u8 = unsafe { std::slice::from_raw_parts(p_mut_u8.0, size) };
-                        println!("MyAllocator::allocate: p_mut_u8={ref_array_u8:p}");
+                        //println!("MyAllocator::allocate: p_mut_u8={ref_array_u8:p}");
                         NonNull::<[u8]>::from(ref_array_u8)
                     } else {
                         panic!("MyAllocator::allocate: Empty MA");
@@ -74,7 +74,7 @@ unsafe impl Allocator for MyAllocator {
     unsafe fn deallocate(&self, ptr: NonNull<u8>, _layout: Layout) {
         if let Ok(mut ma_locked) = MA.lock() {
             let p_mut_u8 = ptr.as_ptr();
-            println!("MyAllocator::deallocate: p_mut_u8={p_mut_u8:p}");
+            //println!("MyAllocator::deallocate: p_mut_u8={p_mut_u8:p}");
             ma_locked.push(PtrMutU8Wrapper(p_mut_u8));
         } else {
             panic!("MyAllocator::deallocate: Mucked up mutex");

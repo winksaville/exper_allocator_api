@@ -1,0 +1,344 @@
+.section .text.crit::ga_test,"ax",@progbits
+	.p2align	4, 0x90
+	.type	crit::ga_test,@function
+crit::ga_test:
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 89
+		fn ga_test(count: u64) {
+	.cfi_startproc
+	.cfi_personality 155, DW.ref.rust_eh_personality
+	.cfi_lsda 27, .Lexception99
+	push rbp
+	.cfi_def_cfa_offset 16
+	push r15
+	.cfi_def_cfa_offset 24
+	push r14
+	.cfi_def_cfa_offset 32
+	push r13
+	.cfi_def_cfa_offset 40
+	push r12
+	.cfi_def_cfa_offset 48
+	push rbx
+	.cfi_def_cfa_offset 56
+	sub rsp, 72
+	.cfi_def_cfa_offset 128
+	.cfi_offset rbx, -56
+	.cfi_offset r12, -48
+	.cfi_offset r13, -40
+	.cfi_offset r14, -32
+	.cfi_offset r15, -24
+	.cfi_offset rbp, -16
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 95
+		unsafe { __rust_alloc(layout.size(), layout.align()) }
+	mov edi, 800
+	mov esi, 8
+	call qword ptr [rip + __rust_alloc@GOTPCREL]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/raw_vec.rs : 188
+		let ptr = match result {
+	test rax, rax
+	je .LBB293_27
+
+	mov r15, rax
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 673
+		Vec { buf: RawVec::with_capacity_in(capacity, alloc), len: 0 }
+	mov qword ptr [rsp], 100
+	mov qword ptr [rsp + 8], rax
+
+	mov qword ptr [rsp + 16], 0
+	xor ebx, ebx
+	lea r14, [rsp + 32]
+	xor r13d, r13d
+	jmp .LBB293_2
+
+	.p2align	4, 0x90
+.LBB293_6:
+	mov rbp, rbx
+
+.LBB293_9:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/mod.rs : 1332
+		copy_nonoverlapping(&src as *const T, dst, 1);
+	mov qword ptr [r15 + 8*rbp], r12
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1840
+		self.len += 1;
+	lea rbx, [rbp + 1]
+
+	mov qword ptr [rsp + 16], rbx
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/cmp.rs : 1465
+		fn lt(&self, other: &$t) -> bool { (*self) < (*other) }
+	cmp r13, 100
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/iter/range.rs : 621
+		if self.start < self.end {
+	je .LBB293_10
+
+.LBB293_2:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 95
+		unsafe { __rust_alloc(layout.size(), layout.align()) }
+	mov edi, 16
+	mov esi, 8
+	call qword ptr [rip + __rust_alloc@GOTPCREL]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 326
+		match Global.allocate(layout) {
+	test rax, rax
+	je .LBB293_3
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/boxed.rs : 220
+		Box::new(x)
+	mov qword ptr [rax], r13
+
+	inc r13
+
+	mov qword ptr [rax + 8], r13
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/hint.rs : 226
+		crate::intrinsics::black_box(dummy)
+	mov qword ptr [rsp + 32], rax
+	#APP
+	#NO_APP
+	mov r12, qword ptr [rsp + 32]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1834
+		if self.len == self.buf.capacity() {
+	cmp rbx, qword ptr [rsp]
+	jne .LBB293_6
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1835
+		self.buf.reserve_for_push(self.len);
+	mov rdi, rsp
+	mov rsi, rbx
+	call alloc::raw_vec::RawVec<T,A>::reserve_for_push
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/raw_vec.rs : 224
+		self.ptr.as_ptr()
+	mov r15, qword ptr [rsp + 8]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1838
+		let end = self.as_mut_ptr().add(self.len);
+	mov rbp, qword ptr [rsp + 16]
+	jmp .LBB293_9
+
+.LBB293_10:
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 99
+		for (i, msg) in allocated.into_iter().enumerate() {
+	mov rax, qword ptr [rsp]
+
+	mov r15, qword ptr [rsp + 8]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/mut_ptr.rs : 488
+		unsafe { intrinsics::offset(self, count) as *mut T }
+	lea r13, [r15 + 8*rbx]
+
+	mov qword ptr [rsp + 24], rax
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 99
+		for (i, msg) in allocated.into_iter().enumerate() {
+	mov qword ptr [rsp + 32], rax
+	mov qword ptr [rsp + 48], r13
+	mov qword ptr [rsp + 56], r15
+
+	mov r12, r15
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/into_iter.rs : 184
+		if self.ptr == self.end {
+	test rbx, rbx
+	je .LBB293_14
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/iter/adapters/enumerate.rs : 46
+		let a = self.iter.next()?;
+	shl rbp, 3
+	mov r14, -8
+	xor r12d, r12d
+
+	.p2align	4, 0x90
+.LBB293_12:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/mod.rs : 1135
+		copy_nonoverlapping(src, tmp.as_mut_ptr(), 1);
+	mov rbx, qword ptr [r15 + 8*r12]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/option.rs : 2406
+		match self {
+	test rbx, rbx
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/iter/adapters/enumerate.rs : 46
+		let a = self.iter.next()?;
+	je .LBB293_13
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 101
+		Protocol::Add { left, right } => {
+	mov rsi, qword ptr [rbx]
+
+	mov rdx, qword ptr [rbx + 8]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 102
+		validate(i, left, right);
+	mov rdi, r12
+	call crit::validate
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 113
+		unsafe { __rust_dealloc(ptr, layout.size(), layout.align()) }
+	mov esi, 16
+	mov edx, 8
+	mov rdi, rbx
+	call qword ptr [rip + __rust_dealloc@GOTPCREL]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/into_iter.rs : 184
+		if self.ptr == self.end {
+	lea rax, [r14 + rbp]
+	add rax, -8
+
+	add r14, -8
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/iter/adapters/enumerate.rs : 48
+		self.count += 1;
+	inc r12
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/into_iter.rs : 184
+		if self.ptr == self.end {
+	cmp rax, -16
+	jne .LBB293_12
+	jmp .LBB293_17
+
+.LBB293_13:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/const_ptr.rs : 809
+		unsafe { intrinsics::ptr_offset_from_unsigned(self, origin) }
+	mov r12, r15
+	sub r12, r14
+
+.LBB293_14:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/mod.rs : 490
+		pub unsafe fn drop_in_place<T: ?Sized>(to_drop: *mut T) {
+	sub r13, r12
+
+	je .LBB293_17
+
+	shr r13, 3
+
+	shl r13, 3
+
+	xor ebx, ebx
+	mov rbp, qword ptr [rip + __rust_dealloc@GOTPCREL]
+
+	.p2align	4, 0x90
+.LBB293_16:
+	mov rdi, qword ptr [r12 + rbx]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 113
+		unsafe { __rust_dealloc(ptr, layout.size(), layout.align()) }
+	mov esi, 16
+	mov edx, 8
+	call rbp
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/mod.rs : 490
+		pub unsafe fn drop_in_place<T: ?Sized>(to_drop: *mut T) {
+	add rbx, 8
+	cmp r13, rbx
+	jne .LBB293_16
+
+.LBB293_17:
+	mov rsi, qword ptr [rsp + 24]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/raw_vec.rs : 241
+		if T::IS_ZST || self.cap == 0 {
+	test rsi, rsi
+	je .LBB293_19
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/alloc/layout.rs : 452
+		if element_size != 0 && n > Layout::max_size_for_align(align) / element_size {
+	shl rsi, 3
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 113
+		unsafe { __rust_dealloc(ptr, layout.size(), layout.align()) }
+	mov edx, 8
+	mov rdi, r15
+	call qword ptr [rip + __rust_dealloc@GOTPCREL]
+
+.LBB293_19:
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 106
+		}
+	add rsp, 72
+	.cfi_def_cfa_offset 56
+	pop rbx
+	.cfi_def_cfa_offset 48
+	pop r12
+	.cfi_def_cfa_offset 40
+	pop r13
+	.cfi_def_cfa_offset 32
+	pop r14
+	.cfi_def_cfa_offset 24
+	pop r15
+	.cfi_def_cfa_offset 16
+	pop rbp
+	.cfi_def_cfa_offset 8
+	ret
+
+.LBB293_3:
+	.cfi_def_cfa_offset 128
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 328
+		Err(_) => handle_alloc_error(layout),
+	mov edi, 16
+	mov esi, 8
+	call qword ptr [rip + alloc::alloc::handle_alloc_error@GOTPCREL]
+
+	ud2
+
+.LBB293_27:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/raw_vec.rs : 190
+		Err(_) => handle_alloc_error(layout),
+	mov edi, 800
+	mov esi, 8
+	call qword ptr [rip + alloc::alloc::handle_alloc_error@GOTPCREL]
+
+	ud2
+
+	mov rbp, rax
+
+	inc r12
+	mov qword ptr [rsp + 64], r12
+
+	sub r15, r14
+	mov qword ptr [rsp + 40], r15
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 105
+		}
+	mov rdi, rbx
+	call core::ptr::drop_in_place<alloc::boxed::Box<exper_allocator_api::Protocol>>
+	lea rdi, [rsp + 32]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 99
+		for (i, msg) in allocated.into_iter().enumerate() {
+	call core::ptr::drop_in_place<core::iter::adapters::enumerate::Enumerate<alloc::vec::into_iter::IntoIter<alloc::boxed::Box<exper_allocator_api::Protocol>>>>
+	jmp .LBB293_24
+
+	mov rbp, rax
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1842
+		}
+	mov rdi, r12
+	call core::ptr::drop_in_place<alloc::boxed::Box<exper_allocator_api::Protocol>>
+	jmp .LBB293_26
+
+	mov rbp, rax
+
+.LBB293_26:
+	mov rdi, rsp
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 106
+		}
+	call core::ptr::drop_in_place<alloc::vec::Vec<alloc::boxed::Box<exper_allocator_api::Protocol>>>
+
+.LBB293_24:
+	mov rdi, rbp
+	call _Unwind_Resume@PLT
+	ud2
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 89
+		fn ga_test(count: u64) {
+	call qword ptr [rip + core::panicking::panic_no_unwind@GOTPCREL]
+	ud2
+
+	.size	crit::ga_test, .Lfunc_end293-crit::ga_test

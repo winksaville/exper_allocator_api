@@ -1,0 +1,320 @@
+.section .text.exper_allocator_api::main,"ax",@progbits
+	.p2align	4, 0x90
+	.type	exper_allocator_api::main,@function
+exper_allocator_api::main:
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 12
+		fn main() {
+	.cfi_startproc
+	.cfi_personality 155, DW.ref.rust_eh_personality
+	.cfi_lsda 27, .Lexception0
+	push r15
+	.cfi_def_cfa_offset 16
+	push r14
+	.cfi_def_cfa_offset 24
+	push r12
+	.cfi_def_cfa_offset 32
+	push rbx
+	.cfi_def_cfa_offset 40
+	sub rsp, 88
+	.cfi_def_cfa_offset 128
+	.cfi_offset rbx, -40
+	.cfi_offset r12, -32
+	.cfi_offset r14, -24
+	.cfi_offset r15, -16
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/fmt/mod.rs : 398
+		Arguments { pieces, fmt: None, args }
+	lea rax, [rip + .L__unnamed_3]
+
+	mov qword ptr [rsp + 24], rax
+	mov qword ptr [rsp + 32], 1
+	mov qword ptr [rsp + 8], 0
+	lea r14, [rip + .L__unnamed_4]
+
+	mov qword ptr [rsp + 40], r14
+	mov qword ptr [rsp + 48], 0
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 13
+		println!("main:+");
+	mov rbx, qword ptr [rip + std::io::stdio::_print@GOTPCREL]
+	lea rdi, [rsp + 8]
+	call rbx
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/fmt/mod.rs : 398
+		Arguments { pieces, fmt: None, args }
+	lea rax, [rip + .L__unnamed_5]
+
+	mov qword ptr [rsp + 24], rax
+	mov qword ptr [rsp + 32], 1
+	mov qword ptr [rsp + 8], 0
+	mov qword ptr [rsp + 40], r14
+	mov qword ptr [rsp + 48], 0
+	lea rdi, [rsp + 8]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 15
+		println!("main inner:+");
+	call rbx
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 17
+		ma_init(10);
+	mov edi, 10
+	call qword ptr [rip + exper_allocator_api::ma_init@GOTPCREL]
+
+	lea rdi, [rsp + 8]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/boxed.rs : 493
+		let ptr = alloc.allocate(layout)?.cast();
+	mov esi, 16
+	mov edx, 8
+	call qword ptr [rip + <exper_allocator_api::MyAllocator as core::alloc::Allocator>::allocate@GOTPCREL]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/boxed.rs : 457
+		match Box::try_new_uninit_in(alloc) {
+	test rax, rax
+	je .LBB8_1
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/mod.rs : 1332
+		copy_nonoverlapping(&src as *const T, dst, 1);
+	movaps xmm0, xmmword ptr [rip + .LCPI8_0]
+	movups xmmword ptr [rax], xmm0
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 20
+		let m = Box::new_in(pt, MyAllocator);
+	mov qword ptr [rsp + 56], rax
+	lea rax, [rsp + 56]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 21
+		println!("main inner: m={m:?}");
+	mov qword ptr [rsp + 72], rax
+	lea r15, [rip + <&T as core::fmt::Debug>::fmt]
+	mov qword ptr [rsp + 80], r15
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/fmt/mod.rs : 398
+		Arguments { pieces, fmt: None, args }
+	lea r12, [rip + .L__unnamed_6]
+
+	mov qword ptr [rsp + 24], r12
+	mov qword ptr [rsp + 32], 2
+	mov qword ptr [rsp + 8], 0
+	lea rbx, [rsp + 72]
+	mov qword ptr [rsp + 40], rbx
+	mov qword ptr [rsp + 48], 1
+
+	lea rdi, [rsp + 8]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 21
+		println!("main inner: m={m:?}");
+	call qword ptr [rip + std::io::stdio::_print@GOTPCREL]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 22
+		assert_eq!(*m, Protocol::Add { left: 5, right: 6 });
+	mov rdi, qword ptr [rsp + 56]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/lib.rs : 11
+		Add { left: u64, right: u64 },
+	cmp qword ptr [rdi], 5
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 22
+		assert_eq!(*m, Protocol::Add { left: 5, right: 6 });
+	jne .LBB8_12
+
+	cmp qword ptr [rdi + 8], 6
+	jne .LBB8_12
+
+	lea rdi, [rsp + 8]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/boxed.rs : 493
+		let ptr = alloc.allocate(layout)?.cast();
+	mov esi, 16
+	mov edx, 8
+	call qword ptr [rip + <exper_allocator_api::MyAllocator as core::alloc::Allocator>::allocate@GOTPCREL]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/boxed.rs : 457
+		match Box::try_new_uninit_in(alloc) {
+	test rax, rax
+	je .LBB8_10
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/mod.rs : 1332
+		copy_nonoverlapping(&src as *const T, dst, 1);
+	movaps xmm0, xmmword ptr [rip + .LCPI8_1]
+	movups xmmword ptr [rax], xmm0
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 26
+		let m = Box::new_in(pt, MyAllocator);
+	mov qword ptr [rsp + 64], rax
+	lea rax, [rsp + 64]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 27
+		println!("main inner: m={m:?}");
+	mov qword ptr [rsp + 72], rax
+	mov qword ptr [rsp + 80], r15
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/fmt/mod.rs : 398
+		Arguments { pieces, fmt: None, args }
+	mov qword ptr [rsp + 24], r12
+	mov qword ptr [rsp + 32], 2
+	mov qword ptr [rsp + 8], 0
+	mov qword ptr [rsp + 40], rbx
+	mov qword ptr [rsp + 48], 1
+
+	lea rdi, [rsp + 8]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 27
+		println!("main inner: m={m:?}");
+	call qword ptr [rip + std::io::stdio::_print@GOTPCREL]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 28
+		assert_eq!(*m, Protocol::Add { left: 2, right: 4 });
+	mov rdi, qword ptr [rsp + 64]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/lib.rs : 11
+		Add { left: u64, right: u64 },
+	cmp qword ptr [rdi], 2
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 28
+		assert_eq!(*m, Protocol::Add { left: 2, right: 4 });
+	jne .LBB8_17
+
+	cmp qword ptr [rdi + 8], 4
+	jne .LBB8_17
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/fmt/mod.rs : 398
+		Arguments { pieces, fmt: None, args }
+	lea rax, [rip + .L__unnamed_7]
+
+	mov qword ptr [rsp + 24], rax
+	mov qword ptr [rsp + 32], 1
+	mov qword ptr [rsp + 8], 0
+
+	mov qword ptr [rsp + 40], r14
+	mov qword ptr [rsp + 48], 0
+
+	lea rdi, [rsp + 8]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 30
+		println!("main inner:-");
+	call qword ptr [rip + std::io::stdio::_print@GOTPCREL]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 31
+		}
+	mov rsi, qword ptr [rsp + 64]
+
+	lea rdi, [rsp + 8]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 348
+		alloc.deallocate(From::from(ptr.cast()), layout)
+	mov edx, 16
+	mov ecx, 8
+	call qword ptr [rip + <exper_allocator_api::MyAllocator as core::alloc::Allocator>::deallocate@GOTPCREL]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 31
+		}
+	mov rsi, qword ptr [rsp + 56]
+
+	lea rdi, [rsp + 8]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 348
+		alloc.deallocate(From::from(ptr.cast()), layout)
+	mov edx, 16
+	mov ecx, 8
+	call qword ptr [rip + <exper_allocator_api::MyAllocator as core::alloc::Allocator>::deallocate@GOTPCREL]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/fmt/mod.rs : 398
+		Arguments { pieces, fmt: None, args }
+	lea rax, [rip + .L__unnamed_8]
+
+	mov qword ptr [rsp + 24], rax
+	mov qword ptr [rsp + 32], 1
+	mov qword ptr [rsp + 8], 0
+
+	mov qword ptr [rsp + 40], r14
+	mov qword ptr [rsp + 48], 0
+	lea rdi, [rsp + 8]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 32
+		println!("main:-");
+	call qword ptr [rip + std::io::stdio::_print@GOTPCREL]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 33
+		}
+	add rsp, 88
+	.cfi_def_cfa_offset 40
+	pop rbx
+	.cfi_def_cfa_offset 32
+	pop r12
+	.cfi_def_cfa_offset 24
+	pop r14
+	.cfi_def_cfa_offset 16
+	pop r15
+	.cfi_def_cfa_offset 8
+	ret
+
+.LBB8_1:
+	.cfi_def_cfa_offset 128
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/boxed.rs : 459
+		Err(_) => handle_alloc_error(layout),
+	mov edi, 16
+	mov esi, 8
+	call qword ptr [rip + alloc::alloc::handle_alloc_error@GOTPCREL]
+	ud2
+
+.LBB8_12:
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 22
+		assert_eq!(*m, Protocol::Add { left: 5, right: 6 });
+	mov qword ptr [rsp + 24], 0
+
+	lea rsi, [rip + .L__unnamed_9]
+	lea rcx, [rip + .L__unnamed_10]
+	lea rdx, [rsp + 8]
+	call core::panicking::assert_failed
+
+	jmp .LBB8_11
+
+.LBB8_10:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/boxed.rs : 459
+		Err(_) => handle_alloc_error(layout),
+	mov edi, 16
+	mov esi, 8
+	call qword ptr [rip + alloc::alloc::handle_alloc_error@GOTPCREL]
+
+	jmp .LBB8_11
+
+.LBB8_17:
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 28
+		assert_eq!(*m, Protocol::Add { left: 2, right: 4 });
+	mov qword ptr [rsp + 24], 0
+
+	lea rsi, [rip + .L__unnamed_11]
+	lea rcx, [rip + .L__unnamed_12]
+	lea rdx, [rsp + 8]
+	call core::panicking::assert_failed
+
+.LBB8_11:
+	ud2
+
+	mov rbx, rax
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 31
+		}
+	mov rdi, qword ptr [rsp + 64]
+
+	call core::ptr::drop_in_place<alloc::boxed::Box<exper_allocator_api::Protocol,exper_allocator_api::MyAllocator>>
+
+	jmp .LBB8_3
+
+	mov rbx, rax
+
+.LBB8_3:
+	mov rdi, qword ptr [rsp + 56]
+
+	call core::ptr::drop_in_place<alloc::boxed::Box<exper_allocator_api::Protocol,exper_allocator_api::MyAllocator>>
+
+	mov rdi, rbx
+	call _Unwind_Resume@PLT
+	ud2
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/main.rs : 12
+		fn main() {
+	call qword ptr [rip + core::panicking::panic_no_unwind@GOTPCREL]
+	ud2
+
+	.size	exper_allocator_api::main, .Lfunc_end8-exper_allocator_api::main

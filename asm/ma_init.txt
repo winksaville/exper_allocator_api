@@ -1,0 +1,354 @@
+.section .text.exper_allocator_api::ma_init,"ax",@progbits
+	.globl	exper_allocator_api::ma_init
+	.p2align	4, 0x90
+	.type	exper_allocator_api::ma_init,@function
+exper_allocator_api::ma_init:
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/lib.rs : 24
+		pub fn ma_init(count: usize) {
+	.cfi_startproc
+	.cfi_personality 155, DW.ref.rust_eh_personality
+	.cfi_lsda 27, .Lexception0
+	push rbp
+	.cfi_def_cfa_offset 16
+	push r15
+	.cfi_def_cfa_offset 24
+	push r14
+	.cfi_def_cfa_offset 32
+	push r12
+	.cfi_def_cfa_offset 40
+	push rbx
+	.cfi_def_cfa_offset 48
+	sub rsp, 48
+	.cfi_def_cfa_offset 96
+	.cfi_offset rbx, -48
+	.cfi_offset r12, -40
+	.cfi_offset r14, -32
+	.cfi_offset r15, -24
+	.cfi_offset rbp, -16
+	mov r14, rdi
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/lib.rs : 34
+		protocol_layout.size() * count,
+	shl rdi, 4
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 95
+		unsafe { __rust_alloc(layout.size(), layout.align()) }
+	mov esi, 8
+	call qword ptr [rip + __rust_alloc@GOTPCREL]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/const_ptr.rs : 836
+		match intrinsics::ptr_guaranteed_cmp(self as _, other as _) {
+	test rax, rax
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/lib.rs : 39
+		if data.is_null() {
+	je .LBB12_25
+
+	mov rbx, rax
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/sync/atomic.rs : 2988
+		Acquire => intrinsics::atomic_load_acquire(dst),
+	mov rax, qword ptr [rip + exper_allocator_api::MA]
+
+		// /home/wink/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.16.0/src/imp_std.rs : 64
+		self.queue.load(Ordering::Acquire) == COMPLETE_PTR
+	cmp rax, 2
+
+		// /home/wink/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.16.0/src/lib.rs : 923
+		if self.0.is_initialized() {
+	jne .LBB12_2
+
+	mov ecx, 1
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/sync/atomic.rs : 3062
+		(Acquire, Relaxed) => intrinsics::atomic_cxchg_acquire_relaxed(dst, old, new),
+	xor eax, eax
+	lock cmpxchg	dword ptr [rip + exper_allocator_api::MA+16], ecx
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sys/unix/locks/futex_mutex.rs : 27
+		if self.futex.compare_exchange(0, 1, Acquire, Relaxed).is_err() {
+	jne .LBB12_4
+
+.LBB12_5:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/sync/atomic.rs : 2987
+		Relaxed => intrinsics::atomic_load_relaxed(dst),
+	mov r12, qword ptr [rip + std::panicking::panic_count::GLOBAL_PANIC_COUNT@GOTPCREL]
+
+	mov rax, qword ptr [r12]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/panicking.rs : 374
+		if GLOBAL_PANIC_COUNT.load(Ordering::Relaxed) & !ALWAYS_ABORT_FLAG == 0 {
+	shl rax, 1
+	test rax, rax
+
+	jne .LBB12_7
+
+	xor r15d, r15d
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/sync/atomic.rs : 2987
+		Relaxed => intrinsics::atomic_load_relaxed(dst),
+	movzx eax, byte ptr [rip + exper_allocator_api::MA+20]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sync/poison.rs : 37
+		if self.get() { Err(PoisonError::new(ret)) } else { Ok(ret) }
+	test al, al
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sync/poison.rs : 268
+		match result {
+	jne .LBB12_22
+
+.LBB12_9:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/cmp.rs : 1465
+		fn lt(&self, other: &$t) -> bool { (*self) < (*other) }
+	test r14, r14
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/iter/range.rs : 621
+		if self.start < self.end {
+	je .LBB12_15
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1834
+		if self.len == self.buf.capacity() {
+	mov rsi, qword ptr [rip + exper_allocator_api::MA+40]
+	lea rbp, [rip + exper_allocator_api::MA+24]
+	jmp .LBB12_11
+
+	.p2align	4, 0x90
+.LBB12_13:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1838
+		let end = self.as_mut_ptr().add(self.len);
+	mov rsi, qword ptr [rip + exper_allocator_api::MA+40]
+
+.LBB12_14:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/raw_vec.rs : 224
+		self.ptr.as_ptr()
+	mov rax, qword ptr [rip + exper_allocator_api::MA+32]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/ptr/mod.rs : 1332
+		copy_nonoverlapping(&src as *const T, dst, 1);
+	mov qword ptr [rax + 8*rsi], rbx
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1840
+		self.len += 1;
+	inc rsi
+	mov qword ptr [rip + exper_allocator_api::MA+40], rsi
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/cmp.rs : 1465
+		fn lt(&self, other: &$t) -> bool { (*self) < (*other) }
+	add rbx, 16
+
+	dec r14
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/iter/range.rs : 621
+		if self.start < self.end {
+	je .LBB12_15
+
+.LBB12_11:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1834
+		if self.len == self.buf.capacity() {
+	cmp rsi, qword ptr [rip + exper_allocator_api::MA+24]
+	jne .LBB12_14
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/vec/mod.rs : 1835
+		self.buf.reserve_for_push(self.len);
+	mov rdi, rbp
+	call alloc::raw_vec::RawVec<T,A>::reserve_for_push
+
+	jmp .LBB12_13
+
+.LBB12_15:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sync/poison.rs : 42
+		if !guard.panicking && thread::panicking() {
+	test r15b, r15b
+
+	jne .LBB12_19
+
+	movabs rax, 9223372036854775807
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/sync/atomic.rs : 2987
+		Relaxed => intrinsics::atomic_load_relaxed(dst),
+	mov rcx, qword ptr [r12]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/panicking.rs : 374
+		if GLOBAL_PANIC_COUNT.load(Ordering::Relaxed) & !ALWAYS_ABORT_FLAG == 0 {
+	test rcx, rax
+	jne .LBB12_17
+
+.LBB12_19:
+	xor eax, eax
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/sync/atomic.rs : 3005
+		Release => intrinsics::atomic_xchg_release(dst, val),
+	xchg dword ptr [rip + exper_allocator_api::MA+16], eax
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sys/unix/locks/futex_mutex.rs : 83
+		if self.futex.swap(0, Release) == 2 {
+	cmp eax, 2
+	je .LBB12_29
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/lib.rs : 49
+		}
+	add rsp, 48
+	.cfi_def_cfa_offset 48
+	pop rbx
+	.cfi_def_cfa_offset 40
+	pop r12
+	.cfi_def_cfa_offset 32
+	pop r14
+	.cfi_def_cfa_offset 24
+	pop r15
+	.cfi_def_cfa_offset 16
+	pop rbp
+	.cfi_def_cfa_offset 8
+	ret
+
+.LBB12_2:
+	.cfi_def_cfa_offset 96
+		// /home/wink/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.16.0/src/lib.rs : 1120
+		self.0.initialize(f)?;
+	call once_cell::imp::OnceCell<T>::initialize
+
+	mov ecx, 1
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/sync/atomic.rs : 3062
+		(Acquire, Relaxed) => intrinsics::atomic_cxchg_acquire_relaxed(dst, old, new),
+	xor eax, eax
+	lock cmpxchg	dword ptr [rip + exper_allocator_api::MA+16], ecx
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sys/unix/locks/futex_mutex.rs : 27
+		if self.futex.compare_exchange(0, 1, Acquire, Relaxed).is_err() {
+	je .LBB12_5
+
+.LBB12_4:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sys/unix/locks/futex_mutex.rs : 28
+		self.lock_contended();
+	lea rdi, [rip + exper_allocator_api::MA+16]
+	call qword ptr [rip + std::sys::unix::locks::futex_mutex::Mutex::lock_contended@GOTPCREL]
+	jmp .LBB12_5
+
+.LBB12_7:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/panicking.rs : 386
+		is_zero_slow_path()
+	call qword ptr [rip + std::panicking::panic_count::is_zero_slow_path@GOTPCREL]
+	mov r15d, eax
+	xor r15b, 1
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/sync/atomic.rs : 2987
+		Relaxed => intrinsics::atomic_load_relaxed(dst),
+	movzx eax, byte ptr [rip + exper_allocator_api::MA+20]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sync/poison.rs : 37
+		if self.get() { Err(PoisonError::new(ret)) } else { Ok(ret) }
+	test al, al
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sync/poison.rs : 268
+		match result {
+	je .LBB12_9
+
+.LBB12_22:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/result.rs : 1112
+		Err(e) => unwrap_failed("called `Result::unwrap()` on an `Err` value", &e),
+	lea rax, [rip + exper_allocator_api::MA+16]
+
+	mov qword ptr [rsp], rax
+	mov byte ptr [rsp + 8], r15b
+
+	lea rdi, [rip + .L__unnamed_8]
+	lea rcx, [rip + .L__unnamed_1]
+	lea r8, [rip + .L__unnamed_9]
+	mov rdx, rsp
+	mov esi, 43
+	call qword ptr [rip + core::result::unwrap_failed@GOTPCREL]
+
+	ud2
+
+.LBB12_29:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sys/unix/locks/futex_mutex.rs : 88
+		self.wake();
+	lea rdi, [rip + exper_allocator_api::MA+16]
+	add rsp, 48
+	.cfi_def_cfa_offset 48
+	pop rbx
+	.cfi_def_cfa_offset 40
+	pop r12
+	.cfi_def_cfa_offset 32
+	pop r14
+	.cfi_def_cfa_offset 24
+	pop r15
+	.cfi_def_cfa_offset 16
+	pop rbp
+	.cfi_def_cfa_offset 8
+	jmp qword ptr [rip + std::sys::unix::locks::futex_mutex::Mutex::wake@GOTPCREL]
+
+.LBB12_17:
+	.cfi_def_cfa_offset 96
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/panicking.rs : 386
+		is_zero_slow_path()
+	call qword ptr [rip + std::panicking::panic_count::is_zero_slow_path@GOTPCREL]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/std/src/sync/poison.rs : 42
+		if !guard.panicking && thread::panicking() {
+	test al, al
+	jne .LBB12_19
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/sync/atomic.rs : 2972
+		Relaxed => intrinsics::atomic_store_relaxed(dst, val),
+	mov byte ptr [rip + exper_allocator_api::MA+20], 1
+
+	jmp .LBB12_19
+
+.LBB12_25:
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/fmt/mod.rs : 398
+		Arguments { pieces, fmt: None, args }
+	lea rax, [rip + .L__unnamed_10]
+
+	mov qword ptr [rsp + 16], rax
+	mov qword ptr [rsp + 24], 1
+	mov qword ptr [rsp], 0
+	lea rax, [rip + .L__unnamed_5]
+
+	mov qword ptr [rsp + 32], rax
+	mov qword ptr [rsp + 40], 0
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/lib.rs : 40
+		panic!("ma_init:  Failed allocating memory")
+	lea rsi, [rip + .L__unnamed_11]
+	mov rdi, rsp
+	call qword ptr [rip + core::panicking::panic_fmt@GOTPCREL]
+
+	ud2
+
+	mov rbx, rax
+
+	mov rdi, rsp
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/result.rs : 1112
+		Err(e) => unwrap_failed("called `Result::unwrap()` on an `Err` value", &e),
+	call core::ptr::drop_in_place<std::sync::poison::PoisonError<std::sync::mutex::MutexGuard<alloc::vec::Vec<exper_allocator_api::PtrMutU8Wrapper>>>>
+
+	jmp .LBB12_27
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/result.rs : 1106
+		pub fn unwrap(self) -> T
+	call qword ptr [rip + core::panicking::panic_no_unwind@GOTPCREL]
+	ud2
+
+	mov rbx, rax
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/lib.rs : 49
+		}
+	movzx esi, r15b
+	lea rdi, [rip + exper_allocator_api::MA+16]
+	call core::ptr::drop_in_place<std::sync::mutex::MutexGuard<alloc::vec::Vec<exper_allocator_api::PtrMutU8Wrapper>>>
+
+.LBB12_27:
+	mov rdi, rbx
+	call _Unwind_Resume@PLT
+	ud2
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/src/lib.rs : 24
+		pub fn ma_init(count: usize) {
+	call qword ptr [rip + core::panicking::panic_no_unwind@GOTPCREL]
+	ud2
+
+	.size	exper_allocator_api::ma_init, .Lfunc_end12-exper_allocator_api::ma_init

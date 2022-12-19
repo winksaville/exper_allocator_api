@@ -1,0 +1,100 @@
+.section .text.crit::ga_test_1,"ax",@progbits
+	.p2align	4, 0x90
+	.type	crit::ga_test_1,@function
+crit::ga_test_1:
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 64
+		fn ga_test_1() {
+	.cfi_startproc
+	.cfi_personality 155, DW.ref.rust_eh_personality
+	.cfi_lsda 27, .Lexception98
+	push rbx
+	.cfi_def_cfa_offset 16
+	sub rsp, 32
+	.cfi_def_cfa_offset 48
+	.cfi_offset rbx, -16
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/hint.rs : 226
+		crate::intrinsics::black_box(dummy)
+	movaps xmm0, xmmword ptr [rip + .LCPI292_0]
+	movaps xmmword ptr [rsp], xmm0
+	mov rbx, rsp
+	#APP
+	#NO_APP
+	movaps xmm0, xmmword ptr [rsp]
+
+	movaps xmmword ptr [rsp + 16], xmm0
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 95
+		unsafe { __rust_alloc(layout.size(), layout.align()) }
+	mov edi, 16
+	mov esi, 8
+	call qword ptr [rip + __rust_alloc@GOTPCREL]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 326
+		match Global.allocate(layout) {
+	test rax, rax
+	je .LBB292_3
+
+	movaps xmm0, xmmword ptr [rsp + 16]
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/boxed.rs : 220
+		Box::new(x)
+	movups xmmword ptr [rax], xmm0
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/core/src/hint.rs : 226
+		crate::intrinsics::black_box(dummy)
+	mov qword ptr [rsp], rax
+
+	#APP
+	#NO_APP
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 72
+		Protocol::Add { left, right } => {
+	mov rax, qword ptr [rsp]
+
+	mov rsi, qword ptr [rax]
+
+	mov rdx, qword ptr [rax + 8]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 73
+		validate(i as usize, left, right);
+	xor edi, edi
+	call crit::validate
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 76
+		}
+	mov rdi, qword ptr [rsp]
+
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 113
+		unsafe { __rust_dealloc(ptr, layout.size(), layout.align()) }
+	mov esi, 16
+	mov edx, 8
+	call qword ptr [rip + __rust_dealloc@GOTPCREL]
+
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 76
+		}
+	add rsp, 32
+	.cfi_def_cfa_offset 16
+	pop rbx
+	.cfi_def_cfa_offset 8
+	ret
+
+.LBB292_3:
+	.cfi_def_cfa_offset 48
+		// /rustc/b70baa4f922a1809d79caeaeb902800c3be283b9/library/alloc/src/alloc.rs : 328
+		Err(_) => handle_alloc_error(layout),
+	mov edi, 16
+	mov esi, 8
+	call qword ptr [rip + alloc::alloc::handle_alloc_error@GOTPCREL]
+	ud2
+
+	mov rbx, rax
+		// /home/wink/prgs/rust/myrepos/exper_allocator_api/benches/crit.rs : 76
+		}
+	mov rdi, qword ptr [rsp]
+	call core::ptr::drop_in_place<alloc::boxed::Box<exper_allocator_api::Protocol>>
+	mov rdi, rbx
+	call _Unwind_Resume@PLT
+	ud2
+
+	.size	crit::ga_test_1, .Lfunc_end292-crit::ga_test_1
